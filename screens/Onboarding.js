@@ -7,11 +7,28 @@ import { Alert } from "react-native";
 import { useHeaderHeight } from '@react-navigation/elements'
 import { useFocusEffect } from "@react-navigation/native";
 
-function Onboarding({ navigation }) {
+function Onboarding({ navigation, setIsLoggedIn }) {
     const [firstName, onChangeFirstName] = React.useState('')
     const [lastName, onChangeLastName] = React.useState('')
     const [email, onChangeEmail] = React.useState('')
     const height = useHeaderHeight()
+    const handleLogin = async () => {
+        if (firstName != '' && email != '' && lastName != '' ) {
+            try {
+                await AsyncStorage.multiSet([['isLoggedIn', JSON.stringify(true)], ['firstName', JSON.stringify(firstName)], ['email', JSON.stringify(email)], ['lastName', JSON.stringify(lastName)]])
+                console.log('Data successfully saved')
+                setIsLoggedIn(true)
+                navigation.navigate('Home')
+            }
+            catch (e) {
+                console.log(e)
+                Alert.alert(`An error occurred: ${e.message}`);
+            }
+        }
+        else {
+            return null;
+        }
+    }
 
     useFocusEffect(
         React.useCallback(() => {
@@ -31,6 +48,9 @@ function Onboarding({ navigation }) {
                             placeholder="First Name"
                             value={firstName}
                             onChangeText={onChangeFirstName}
+                            returnKeyType="next"
+                            onSubmitEditing={() => { this.secondTextInput.focus(); }}
+                            blurOnSubmit={false}
                         />
                         <Text style={styles.label}>Last Name</Text>
                         <TextInput
@@ -38,6 +58,9 @@ function Onboarding({ navigation }) {
                             placeholder="Last Name"
                             value={lastName}
                             onChangeText={onChangeLastName}
+                            ref={(input) => { this.secondTextInput = input; }}
+                            returnKeyType="next"
+                            onSubmitEditing={() => { this.thirdTextInput.focus(); }}
                         />
                         <Text style={styles.label}>Email</Text>
                         <TextInput
@@ -46,27 +69,14 @@ function Onboarding({ navigation }) {
                             value={email}
                             onChangeText={onChangeEmail}
                             keyboardType="email-address"
+                            ref={(input) => { this.thirdTextInput = input; }}
+                            returnKeyType="done"
+                            onSubmitEditing={() => Keyboard.dismiss()}
                         />
                         <View style={styles.pressableContainer}>
                             <Pressable
                                 style={firstName != '' && email != '' && lastName != '' ? styles.buttonActive : styles.buttonDisabled}
-                                onPress={async () => {
-                                    if (firstName != '' && email != '' && lastName != '' ) {
-                                        try {
-                                            // await AsyncStorage.setItem('isLoggedIn', JSON.stringify(true))
-                                            await AsyncStorage.multiSet([['isLoggedIn', JSON.stringify(true)], ['firstName', JSON.stringify(firstName)], ['email', JSON.stringify(email)], ['lastName', JSON.stringify(lastName)]])
-                                            console.log('Data successfully saved')
-                                            navigation.navigate('Profile')
-                                        }
-                                        catch (e) {
-                                            console.log(e)
-                                            Alert.alert(`An error occurred: ${e.message}`);
-                                        }
-                                    }
-                                    else {
-                                        return null;
-                                    }
-                                }}
+                                onPress={handleLogin}
                             >
                                 <Text style={styles.buttonText}>Next</Text>
                             </Pressable>

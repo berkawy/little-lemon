@@ -1,20 +1,39 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
+import { View, Text, StyleSheet, Image, Pressable } from "react-native";
+import { useRoute } from "@react-navigation/native";
 
-const ProfileHeader = (props) => {
+function ProfileHeader({ navigation, ...props }) {
+    const route = useRoute();
     return (
         <View style={styles.header}>
-            <View style={styles.back}>
-                <Text>Back</Text>
-            </View>
             <View style={styles.logoContainer}>
                 <Image style={styles.logo} source={require('../assets/footer_logo.png')} resizeMode="contain" />
             </View>
-            <View style={styles.circularImageContainer}>
-                {/* <Image style={styles.circularImage} source={require('../assets/Profile.png')} resizeMode="cover" /> */}
-            {props.image != null && props.image != '' ? <Image style={styles.circularImage} source={{uri: props.image}} resizeMode="cover" /> : <View style={styles.circularImage}><Text style={styles.placeholder}>{props.placeHolder}</Text></View>}
-
-            </View>
+            {route.name != 'Profile' ?
+                <Pressable style={styles.circularImageContainer} onPress={() => navigation.navigate('Profile')}>
+                    {props.image != null && props.image != '' ?
+                        <Image
+                            style={styles.circularImage}
+                            source={{ uri: props.image }}
+                            resizeMode="cover" />
+                        :
+                        <View style={styles.circularImage}>
+                            <Text style={styles.placeholder}>{props.placeHolder}</Text>
+                        </View>}
+                </Pressable>
+                :
+                <View style={styles.circularImageContainer} onPress={() => navigation.navigate('Profile')}>
+                    {props.image != null && props.image != '' ?
+                        <Image
+                            style={styles.circularImage}
+                            source={{ uri: props.image }}
+                            resizeMode="cover" />
+                        :
+                        <View style={styles.circularImage}>
+                            <Text style={styles.placeholder}>{props.placeHolder}</Text>
+                        </View>}
+                </View>
+            }
         </View>
     );
 }

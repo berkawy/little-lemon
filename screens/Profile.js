@@ -8,8 +8,9 @@ import { Alert } from "react-native";
 import { MaskedTextInput } from "react-native-mask-text";
 import { useFocusEffect } from "@react-navigation/native";
 import { useHeaderHeight } from '@react-navigation/elements'
+import { Keyboard } from "react-native";
 
-function Profile({ navigation }) {
+function Profile({ navigation, setIsLoggedIn }) {
     const [isOrderChecked, setIsOrderChecked] = React.useState(false);
     const [isPasswordChecked, setIsPasswordChecked] = React.useState(false);
     const [isSpecialChecked, setIsSpecialChecked] = React.useState(false);
@@ -74,10 +75,10 @@ function Profile({ navigation }) {
 
     const handlePhoneNumberChange = (formatted, extracted) => {
         handleInputChange();
-        onChangePhoneNumber(extracted);
+        onChangePhoneNumber(formatted);
         setData({
             ...data,
-            phoneNumber: extracted
+            phoneNumber: formatted
         })
     };
 
@@ -193,7 +194,6 @@ function Profile({ navigation }) {
         try {
             await AsyncStorage.setItem('isLoggedIn', JSON.stringify(false));
             await AsyncStorage.clear();
-            navigation.navigate('Onboarding')
             setData({
                 firstName: '',
                 lastName: '',
@@ -217,6 +217,8 @@ function Profile({ navigation }) {
             setIsSpecialChecked(false);
             setIsNewsletterChecked(false);
             setChangesMade(false);
+            setIsLoggedIn(false);
+            navigation.navigate('Onboarding')
         } catch (e) {
             console.log(e);
             Alert.alert(`An error occured: ${e.message}`);
@@ -264,8 +266,6 @@ function Profile({ navigation }) {
     );
 
     React.useEffect(() => {
-        console.log("here")
-        console.log(data);
         const getUserData = async () => {
             try {
                 jsonValue = await AsyncStorage.multiGet(
@@ -322,8 +322,20 @@ function Profile({ navigation }) {
                 <Text style={styles.text}>Avatar</Text>
                 <View style={styles.imageRow}>
                     <View style={styles.imageContainer}>
-                        {image != null && image != '' ? <Image style={styles.image} source={{ uri: image }} resizeMode="cover" /> : <View style={styles.image}><Text style={styles.placeholder}>{data.firstName.charAt(0).toUpperCase() + data.lastName.charAt(0).toUpperCase()}</Text></View>}
-
+                        {image != null && image != '' ?
+                            <Image
+                                style={styles.image}
+                                source={{ uri: image }}
+                                resizeMode="cover" /> :
+                            <View
+                                style={styles.image}>
+                                <Text
+                                    style={styles.placeholder}
+                                >
+                                    {data.firstName.charAt(0).toUpperCase() + data.lastName.charAt(0).toUpperCase()}
+                                </Text>
+                            </View>
+                        }
                     </View>
                     <View style={styles.editContainer}>
                         <Pressable style={styles.editButton} onPress={pickImage}>
@@ -335,13 +347,51 @@ function Profile({ navigation }) {
                     </View>
                 </View>
                 <Text style={styles.text}>First Name</Text>
-                <TextInput style={styles.input} value={firstName} onChangeText={handleFirstNameChange} placeholder={data.firstName != '' ? data.firstName : 'First Name'} />
+                <TextInput
+                    style={styles.input}
+                    value={firstName}
+                    onChangeText={handleFirstNameChange}
+                    placeholder={data.firstName != '' ? data.firstName : 'First Name'}
+                    returnKeyType="next"
+                    onSubmitEditing={() => { this.secondTextInput.focus(); }}
+                    blurOnSubmit={false}
+                />
                 <Text style={styles.text}>Last Name</Text>
-                <TextInput style={styles.input} value={lastName} onChangeText={handleLastNameChange} placeholder={data.lastName != '' ? data.lastName : 'Last Name'} />
+                <TextInput
+                    style={styles.input}
+                    value={lastName}
+                    onChangeText={handleLastNameChange}
+                    placeholder={data.lastName != '' ? data.lastName : 'Last Name'}
+                    ref={(input) => { this.secondTextInput = input; }}
+                    returnKeyType="next"
+                    onSubmitEditing={() => { this.thirdTextInput.focus(); }}
+                    blurOnSubmit={false}
+                />
                 <Text style={styles.text}>Email</Text>
-                <TextInput style={styles.input} value={email} onChangeText={handleEmailChange} keyboardType="email-address" placeholder={data.email != '' ? data.email : 'Email'} />
+                <TextInput
+                    style={styles.input}
+                    value={email}
+                    onChangeText={handleEmailChange}
+                    keyboardType="email-address"
+                    placeholder={data.email != '' ? data.email : 'Email'}
+                    ref={(input) => { this.thirdTextInput = input; }}
+                    returnKeyType="next"
+                    onSubmitEditing={() => { this.fourthTextInput.focus(); }}
+                    blurOnSubmit={false}
+                />
                 <Text style={styles.text}>Phone Number</Text>
-                <MaskedTextInput mask={phoneNumberMask} style={styles.input} value={phoneNumber} onChangeText={handlePhoneNumberChange} keyboardType="numeric" placeholder={data.phoneNumber != '' ? data.phoneNumber : '(123) 456-7890'} />
+                <MaskedTextInput
+                    mask={phoneNumberMask}
+                    style={styles.input}
+                    value={phoneNumber}
+                    onChangeText={handlePhoneNumberChange}
+                    keyboardType="numeric"
+                    placeholder={data.phoneNumber != '' ? data.phoneNumber : '(123) 456-7890'}
+                    ref={(input) => { this.fourthTextInput = input; }}
+                    returnKeyType="done"
+                    onSubmitEditing={() => Keyboard.dismiss()}
+                    blurOnSubmit={false}
+                />
                 <Text style={styles.headerText}>Email notifications</Text>
                 <View style={styles.checkboxContainer}>
                     <View style={styles.checkbox}>
