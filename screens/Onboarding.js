@@ -16,7 +16,6 @@ function Onboarding({ navigation, setIsLoggedIn }) {
         if (firstName != '' && email != '' && lastName != '' ) {
             try {
                 await AsyncStorage.multiSet([['isLoggedIn', JSON.stringify(true)], ['firstName', JSON.stringify(firstName)], ['email', JSON.stringify(email)], ['lastName', JSON.stringify(lastName)]])
-                console.log('Data successfully saved')
                 setIsLoggedIn(true)
                 navigation.navigate('Home')
             }
@@ -99,12 +98,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#eeeeee",
         width: "100%",
-        // paddingBottom: 250,
 
     },
     pressableContainer: {
-        alignSelf: 'flex-end', // Align to the right
-        margin: 10, // Adjust spacing as needed
+        alignSelf: 'flex-end',
+        margin: 10,
         marginTop: 20,
     },
     text: {

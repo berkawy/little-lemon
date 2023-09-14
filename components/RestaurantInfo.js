@@ -23,7 +23,7 @@ function RestaurantInfo() {
                 </View>
                 <View style={styles.rightContainer}>
                     <View style={styles.imageContainer}>
-                        <Image source={require('../assets/Hero_image.png')} style={styles.image} resizeMode="center" />
+                        <Image source={require('../assets/Images/Hero_image.png')} style={styles.image} resizeMode="center" />
                     </View>
                 </View>
             </View>
@@ -61,14 +61,12 @@ const styles = StyleSheet.create({
         fontSize: 64,
         color: "#F4CE14",
         marginTop: 10,
-        fontWeight: "500",
         marginLeft: 20,
         fontFamily: 'markazi',
     },
     subText: {
         fontSize: 40,
         color: "#EDEFEE",
-        fontWeight: "500",
         marginTop: -20,
         paddingLeft: 20,
         fontFamily: 'markazi',
@@ -77,9 +75,8 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: "#EDEFEE",
         marginTop: 10,
-        fontWeight: "500",
         paddingLeft: 20,
-        fontFamily: 'karla',
+        fontFamily: 'karla-medium',
     },
     imageContainer: {
         width: 150,

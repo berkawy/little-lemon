@@ -7,7 +7,7 @@ function ProfileHeader({ navigation, ...props }) {
     return (
         <View style={styles.header}>
             <View style={styles.logoContainer}>
-                <Image style={styles.logo} source={require('../assets/footer_logo.png')} resizeMode="contain" />
+                <Image style={styles.logo} source={require('../assets/Images/footer_logo.png')} resizeMode="contain" />
             </View>
             {route.name != 'Profile' ?
                 <Pressable style={styles.circularImageContainer} onPress={() => navigation.navigate('Profile')}>

@@ -1,9 +1,9 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import {StyleSheet, Image } from "react-native";
 
 const Header = () => {
     return (
-            <Image style={styles.logo} source={require('../assets/footer_logo.png')} resizeMode="contain" />
+            <Image style={styles.logo} source={require('../assets/Images/footer_logo.png')} resizeMode="contain" />
     );
 }
 

@@ -1,13 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, ScrollView, FlatList } from "react-native";
-import { useFonts } from "expo-font";
-import customFonts from '../expo-fonts'
+import { View, Text, StyleSheet } from "react-native";
 
 function Order() {
-    const [fontsLoaded] = useFonts({
-        'markazi': customFonts['markazi'],
-        'karla': customFonts['karla'],
-    });
+
     return (
         <View style={styles.container}>
             <Text style={styles.headerText}>ORDER FOR DELIVERY!</Text>
@@ -33,13 +28,13 @@ function Order() {
 const styles = StyleSheet.create({
     container: {
         flex: 0.35,
-        backgroundColor: "#f3f6f4",
+        backgroundColor: "#FFFFFF",
         width: "100%",
         justifyContent: 'flex-start',
     },
     headerText: {
         fontSize: 20,
-        fontWeight: "bold",
+        fontFamily: 'karla-extra-bold',
         padding: 20,
     },
     topContainer: {
@@ -54,7 +49,7 @@ const styles = StyleSheet.create({
     },
     sectionText: {
         fontSize: 16,
-        fontWeight: "bold",
+        fontFamily: 'karla-extra-bold',
         padding: 8,
     },
     horizontalLine: {

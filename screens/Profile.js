@@ -40,7 +40,6 @@ function Profile({ navigation, setIsLoggedIn }) {
     let jsonValue = null;
 
     const handleInputChange = () => {
-        // Check if any of the form inputs have changed
         if (
             firstName !== data.firstName ||
             lastName !== data.lastName ||
@@ -103,7 +102,6 @@ function Profile({ navigation, setIsLoggedIn }) {
     };
 
     const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
@@ -111,7 +109,6 @@ function Profile({ navigation, setIsLoggedIn }) {
             quality: 1,
         });
 
-        // await AsyncStorage.setItem('image', result.assets[0].uri);
         if (!result.canceled) {
             handleInputChange();
             setImage(result.assets[0].uri);
@@ -240,7 +237,6 @@ function Profile({ navigation, setIsLoggedIn }) {
                         'isSpecialChecked',
                         'isNewsletterChecked',
                     ]);
-                    // Rest of your code to set state with fetched data...
                     const retrievedImageURI = jsonValue[4][1] ? jsonValue[4][1] : '';
                     setData({
                         firstName: jsonValue[0][1] ? JSON.parse(jsonValue[0][1]) : '',
@@ -262,7 +258,7 @@ function Profile({ navigation, setIsLoggedIn }) {
             };
 
             getUserData();
-        }, []) // The empty dependency array means this effect runs once when the component mounts and every time it is focused
+        }, [])
     );
 
     React.useEffect(() => {
@@ -305,7 +301,7 @@ function Profile({ navigation, setIsLoggedIn }) {
                 setIsSpecialChecked(jsonValue[7][1] ? JSON.parse(jsonValue[7][1]) : false);
                 setIsNewsletterChecked(jsonValue[8][1] ? JSON.parse(jsonValue[8][1]) : false);
                 if (retrievedImageURI === '') {
-                    setImage(null); // Set image state to null or some default image
+                    setImage(null);
                 } else {
                     setImage(retrievedImageURI);
                 }
