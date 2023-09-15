@@ -1,3 +1,5 @@
+// Component responsible for displaying the header of the app on the onBoarding screen only
+
 import React from "react";
 import {StyleSheet, Image } from "react-native";
 

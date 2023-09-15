@@ -1,3 +1,6 @@
+// Screen that us displayed after the on boarding on first launch of the app
+// It is the first screen after splash screen on subsequent launches
+
 import React from "react";
 import { View, StyleSheet, Image, ScrollView, FlatList, KeyboardAvoidingView, Platform } from "react-native";
 import { useHeaderHeight } from '@react-navigation/elements'
@@ -17,6 +20,7 @@ function Home({ navigation, menuData }) {
         lastName: '',
     });
 
+    // Function to get user data from async storage to display image on the profile header
     React.useEffect(() => {
         const getUserData = async () => {
             let jsonValue = null;
@@ -38,6 +42,7 @@ function Home({ navigation, menuData }) {
         getUserData();
     }, []);
 
+    // Function to get user data from async storage to display image on the profile header on focus
     useFocusEffect(
         React.useCallback(() => {
             const getData = async () => {
@@ -59,14 +64,13 @@ function Home({ navigation, menuData }) {
             getData();
         }, [])
     );
-
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container} keyboardVerticalOffset={height}>
             <ProfileHeader navigation={navigation} image={image} placeHolder={data.firstName.charAt(0).toUpperCase() + data.lastName.charAt(0).toUpperCase()} />
             <ScrollView style={styles.upperSection} nestedScrollEnabled={false}>
                 <View >
                     <RestaurantInfo />
-                    <Order />
+                    <Order menuData={menuData} />
                 </View>
                 <View style={styles.lowerSection}>
                     <FlatList

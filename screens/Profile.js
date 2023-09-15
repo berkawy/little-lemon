@@ -1,3 +1,5 @@
+// Profile screen of the logged in user
+
 import React from "react";
 import { View, Text, StyleSheet, Image, Pressable, TextInput, ScrollView, Platform, KeyboardAvoidingView } from "react-native";
 import ProfileHeader from "../components/ProfileHeader";
@@ -39,6 +41,8 @@ function Profile({ navigation, setIsLoggedIn }) {
     const phoneNumberMask = '(999) 999-9999';
     let jsonValue = null;
 
+
+    // Function that tracks changes for the states
     const handleInputChange = () => {
         if (
             firstName !== data.firstName ||
@@ -57,21 +61,25 @@ function Profile({ navigation, setIsLoggedIn }) {
         }
     };
 
+    // Function to set state of first name on its change
     const handleFirstNameChange = (text) => {
         onChangeFirstName(text);
         handleInputChange();
     };
 
+    // Function to set state of last name on its change
     const handleLastNameChange = (text) => {
         onChangeLastName(text);
         handleInputChange();
     };
 
+    // Function to set state of email on its change
     const handleEmailChange = (text) => {
         onChangeEmail(text);
         handleInputChange();
     };
 
+    // Function to set state of phone number on its change
     const handlePhoneNumberChange = (formatted, extracted) => {
         handleInputChange();
         onChangePhoneNumber(formatted);
@@ -81,26 +89,31 @@ function Profile({ navigation, setIsLoggedIn }) {
         })
     };
 
+    // Function to set state of checkbox order checked on its change
     const handleOrderChecked = () => {
         setIsOrderChecked(!isOrderChecked);
         handleInputChange();
     };
 
+    // Function to set state of checkbox password checked on its change
     const handlePasswordChecked = () => {
         setIsPasswordChecked(!isPasswordChecked);
         handleInputChange();
     };
 
+    // Function to set state of checkbox special checked on its change
     const handleSpecialChecked = () => {
         setIsSpecialChecked(!isSpecialChecked);
         handleInputChange();
     };
 
+    // Function to set state of checkbox newsletter checked on its change
     const handleNewsLetterChecked = () => {
         setIsNewsletterChecked(!isNewsletterChecked);
         handleInputChange();
     };
 
+    // Function to pick an image from the gallery
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -115,6 +128,7 @@ function Profile({ navigation, setIsLoggedIn }) {
         }
     };
 
+    // Function to remove the image
     const removeImage = async () => {
         try {
             await AsyncStorage.removeItem('image');
@@ -126,6 +140,7 @@ function Profile({ navigation, setIsLoggedIn }) {
         }
     };
 
+    // Function to save the changes made to the profile
     const saveChanges = async () => {
         try {
             const updatedFirstName = firstName !== '' ? firstName : data.firstName;
@@ -167,6 +182,7 @@ function Profile({ navigation, setIsLoggedIn }) {
         }
     };
 
+    // Function to discard the changes made to the profile
     const discardChanges = async () => {
         try {
             onChangeFirstName(data.firstName);
@@ -187,6 +203,7 @@ function Profile({ navigation, setIsLoggedIn }) {
         }
     }
 
+    // Function to logout the user
     const logout = async () => {
         try {
             await AsyncStorage.setItem('isLoggedIn', JSON.stringify(false));
@@ -222,6 +239,7 @@ function Profile({ navigation, setIsLoggedIn }) {
         }
     };
 
+    // Function to get user data from async storage and display them in the fields and to display image on the profile header on focus
     useFocusEffect(
         React.useCallback(() => {
             const getUserData = async () => {
@@ -261,6 +279,7 @@ function Profile({ navigation, setIsLoggedIn }) {
         }, [])
     );
 
+    // Function to get user data from async storage and display them in the fields and to display image on the profile header
     React.useEffect(() => {
         const getUserData = async () => {
             try {

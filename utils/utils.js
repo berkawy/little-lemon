@@ -1,3 +1,5 @@
+// Used to populate data for flatlist component in home screen
+
 export function getFlatListData(data) {
     let result = [];
     data.forEach((item) => {

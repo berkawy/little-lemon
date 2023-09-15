@@ -1,14 +1,18 @@
+// First screen of the app, loads the data from the API and saves it to the database on the first lauch of the app
+// Fetches data from the database for subsequent launches
+
 import React from "react";
 import { View, Text, StyleSheet, Image, ActivityIndicator } from "react-native";
-import { createTable, dropTable, getMenuItems, saveMenuItems } from "../database";
-import { getFlatListData } from "../utils";
+import { createTable, dropTable, getMenuItems, saveMenuItems } from "../utils/database";
+import { getFlatListData } from "../utils/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
-import customFonts from '../expo-fonts'
+import customFonts from '../utils/expo-fonts'
 import * as Font from 'expo-font';
 
 export default function Splash({setIsLoading, setMenuData, setIsLoggedIn}) {
 
+    // Function to fetch data from the API
     const getMenuData = async () => {
         try {
             const response = await fetch('https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/capstone.json');
@@ -20,21 +24,25 @@ export default function Splash({setIsLoading, setMenuData, setIsLoggedIn}) {
         }
     }
 
-    async function fetchAndReplaceImageBlob(menuItems) {
+    // Function to fetch images from the API
+    async function fetchImages(menuItems) {
         const updatedMenuItems = await Promise.all(
             menuItems.map(async (item) => {
                 try {
                     const imageUrl = `https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/images/${item.image}?raw=true`;
                     const imageResponse = await fetch(imageUrl);
+                    // If the image is found, set the image property of the item to the image URL
                     if (imageResponse.ok) {
                         const contentType = imageResponse.headers.get('content-type');
                         if (contentType) {
                             item.image = imageUrl
                         }
+                        // if the image exists but corrupted, set the image property of the item to a placeholder image
                         else {
                             item.image = 'https://st3.depositphotos.com/23594922/31822/v/450/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg'
                         }
                     }
+                    // if the image does not exist on the server, set the image property of the item to a placeholder image
                     else {
                         item.image = 'https://st3.depositphotos.com/23594922/31822/v/450/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg'
                     }
@@ -49,6 +57,7 @@ export default function Splash({setIsLoading, setMenuData, setIsLoggedIn}) {
         return updatedMenuItems;
     }
 
+    // Function to check if the user is logged in
     const checkLoggedIn = async () => {
         try {
             const value = await AsyncStorage.getItem('isLoggedIn')
@@ -61,6 +70,7 @@ export default function Splash({setIsLoading, setMenuData, setIsLoggedIn}) {
         }
     }
 
+    // Function to load custom fonts
     const loadFonts = async () => {
         try {
             await Font.loadAsync(customFonts)
@@ -69,6 +79,8 @@ export default function Splash({setIsLoading, setMenuData, setIsLoggedIn}) {
         }
     }
 
+    // Used to load the data from the API and save it to the database on the first launch of the app
+    // Used to fetch data from the database for subsequent launches
     React.useEffect(() => {
         (async () => {
             try {
@@ -77,7 +89,7 @@ export default function Splash({setIsLoading, setMenuData, setIsLoggedIn}) {
                 let menuItems = await getMenuItems();
                 if (!menuItems.length || menuItems.length == 0) {
                     menuItems = await getMenuData();
-                    menuItems = await fetchAndReplaceImageBlob(menuItems);
+                    menuItems = await fetchImages(menuItems);
                     saveMenuItems(menuItems);
                 }
                 const flatListData = getFlatListData(menuItems);

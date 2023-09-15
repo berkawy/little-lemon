@@ -1,3 +1,5 @@
+// First page displayed after splash screen if first time to open the app or after logging out from the app
+
 import React from "react";
 import { View, Text, StyleSheet, TextInput, Pressable, KeyboardAvoidingView, Platform, ScrollView} from "react-native";
 import Header from "../components/Header";
@@ -6,12 +8,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from "react-native";
 import { useHeaderHeight } from '@react-navigation/elements'
 import { useFocusEffect } from "@react-navigation/native";
-
+import { validateEmail } from "../utils/index";
 function Onboarding({ navigation, setIsLoggedIn }) {
+    // States for tracking text inputs
     const [firstName, onChangeFirstName] = React.useState('')
     const [lastName, onChangeLastName] = React.useState('')
     const [email, onChangeEmail] = React.useState('')
+
+    // Get header height for keyboard avoidance
     const height = useHeaderHeight()
+
+    // Function to handle login
     const handleLogin = async () => {
         if (firstName != '' && email != '' && lastName != '' ) {
             try {
@@ -29,6 +36,7 @@ function Onboarding({ navigation, setIsLoggedIn }) {
         }
     }
 
+    // Clear text inputs on focus
     useFocusEffect(
         React.useCallback(() => {
             onChangeFirstName('')
@@ -36,6 +44,7 @@ function Onboarding({ navigation, setIsLoggedIn }) {
             onChangeEmail('')
         }, [])
     );
+
     return (
         <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}  keyboardVerticalOffset={height}>
                     <Header />
@@ -74,7 +83,7 @@ function Onboarding({ navigation, setIsLoggedIn }) {
                         />
                         <View style={styles.pressableContainer}>
                             <Pressable
-                                style={firstName != '' && email != '' && lastName != '' ? styles.buttonActive : styles.buttonDisabled}
+                                style={firstName != '' && email != '' && lastName != '' && validateEmail(email) ? styles.buttonActive : styles.buttonDisabled}
                                 onPress={handleLogin}
                             >
                                 <Text style={styles.buttonText}>Next</Text>

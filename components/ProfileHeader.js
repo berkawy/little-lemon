@@ -1,3 +1,5 @@
+// Component responsible for the header of the app on all screens except the onBoarding screen
+
 import React from "react";
 import { View, Text, StyleSheet, Image, Pressable } from "react-native";
 import { useRoute } from "@react-navigation/native";

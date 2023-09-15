@@ -1,18 +1,23 @@
+// Component responsible for the upper part of the home page
+
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { Searchbar } from 'react-native-paper';
 import { useFonts } from "expo-font";
-import customFonts from '../expo-fonts'
+import customFonts from '../utils/expo-fonts'
+import { useFilter } from "../utils/FilterContext";
 
 function RestaurantInfo() {
     const [] = useFonts({
         'markazi': customFonts['markazi'],
         'karla': customFonts['karla'],
     });
+    const {searchQuery, setSearchQuery} = useFilter();
 
-    const [searchQuery, setSearchQuery] = React.useState('');
-    const onChangeSearch = query => setSearchQuery(query);
-
+    // Function to handle the change of the search bar
+    const onChangeSearch = async (query) => {
+        setSearchQuery(query);
+    }
     return (
         <View style={styles.container}>
             <Text style={styles.headerText}>Little Lemon</Text>

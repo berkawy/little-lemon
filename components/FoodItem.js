@@ -1,3 +1,5 @@
+// Component responsible for displaying food items fetched from the API in the home page
+
 import React from "react";
 import { View, Text, Image, StyleSheet, ActivityIndicator } from "react-native";
 
