@@ -20,7 +20,7 @@ function Onboarding({ navigation, setIsLoggedIn }) {
 
     // Function to handle login
     const handleLogin = async () => {
-        if (firstName != '' && email != '' && lastName != '' ) {
+        if (firstName != '' && email != '' && lastName != '' && validateEmail(email) ) {
             try {
                 await AsyncStorage.multiSet([['isLoggedIn', JSON.stringify(true)], ['firstName', JSON.stringify(firstName)], ['email', JSON.stringify(email)], ['lastName', JSON.stringify(lastName)]])
                 setIsLoggedIn(true)
