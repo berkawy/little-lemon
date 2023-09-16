@@ -70,8 +70,8 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     circularImage: {
-        width: 80,
-        height: 80,
+        width: 60,
+        height: 60,
         borderRadius: 40,
         position: 'absolute',
         marginRight: 10,
